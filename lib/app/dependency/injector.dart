@@ -1,4 +1,9 @@
 import 'package:down_yt/app/core/network/network_checker.dart';
+import 'package:down_yt/features/downloader/data/datasources/youtube_script.dart';
+import 'package:down_yt/features/downloader/data/repositories/download_repo_impl.dart';
+import 'package:down_yt/features/downloader/domain/repositories/download_repo.dart';
+import 'package:down_yt/features/downloader/domain/usecases/get_download_info.dart';
+import 'package:down_yt/features/downloader/presentation/bloc/downloader_bloc.dart';
 import 'package:down_yt/features/player/data/datasources/player_data.dart';
 import 'package:down_yt/features/player/data/repositories/player_repo_impl.dart';
 import 'package:down_yt/features/player/domain/repositories/player_repo.dart';

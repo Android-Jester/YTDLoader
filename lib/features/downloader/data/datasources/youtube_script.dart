@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:down_yt/app/core/api.dart';
 import 'package:down_yt/features/downloader/data/models/download_info_model.dart';
 import 'package:down_yt/features/downloader/domain/entities/download_info.dart';
@@ -9,6 +11,8 @@ abstract class YoutubeDownloadData {
 }
 
 class YoutubeDownloaderData implements YoutubeDownloadData {
+  VideoSize sizeType = VideoSize.byte;
+
   @override
   Future<List<DownloadInfoModel>> getDownloadInfo(String url, String title) async {
     final videoManifest = await youtube.videos.streamsClient.getManifest(url);
@@ -21,28 +25,45 @@ class YoutubeDownloaderData implements YoutubeDownloadData {
         videoSize: _getVideoSize(element),
         bitRates: element.bitrate.megaBitsPerSecond.toString(),
         videoId: url,
+        sizeType: sizeType,
       );
-    }).toList();
+    }).toList()
+      ..addAll(
+        videoManifest.audio
+            .sortByBitrate()
+            .map(
+              (e) => DownloadInfoModel(
+                itemName: title,
+                quality: e.qualityLabel,
+                mediaCodec: e.codec.mimeType,
+                videoSize: _getVideoSize(e),
+                bitRates: e.bitrate.megaBitsPerSecond.toString(),
+                videoId: url,
+                sizeType: sizeType,
+              ),
+            )
+            .toList(),
+      );
     return downloadInfo;
   }
 
-  double _getVideoSize(MuxedStreamInfo element) {
-    var sizeType = VideoSize.byte;
+  double _getVideoSize(StreamInfo element) {
     final size = element.size.totalBytes.toDouble();
     late double muxSize;
-    const mb = 1024 * 1024;
-    const kb = 1024;
+    final mb = math.pow(1024, 2);
+    final gb = math.pow(1024, 3);
 
-    if (size > kb) {
-      muxSize = element.size.totalKiloBytes;
-      sizeType = VideoSize.kilo;
-    } else if (size > mb) {
+    if (size > gb) {
+      muxSize = element.size.totalGigaBytes;
+      sizeType = VideoSize.giga;
+    } else if (size < gb && size > mb) {
       muxSize = element.size.totalMegaBytes;
       sizeType = VideoSize.mega;
     } else {
-      muxSize = element.size.totalGigaBytes;
-      sizeType = VideoSize.giga;
+      muxSize = element.size.totalKiloBytes;
+      sizeType = VideoSize.kilo;
     }
+
     return muxSize;
   }
 

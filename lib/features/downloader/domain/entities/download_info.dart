@@ -1,3 +1,4 @@
+import 'package:down_yt/app/core/api.dart';
 import 'package:equatable/equatable.dart';
 
 class DownloadInfo extends Equatable {
@@ -8,6 +9,7 @@ class DownloadInfo extends Equatable {
     required this.videoSize,
     required this.bitRates,
     required this.videoId,
+    required this.sizeType,
   });
 
   // Mixed
@@ -21,6 +23,9 @@ class DownloadInfo extends Equatable {
 
   // Audio
   final String bitRates;
+
+  // VideoType
+  final VideoSize sizeType;
 
   @override
   List<Object?> get props => [];

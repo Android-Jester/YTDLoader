@@ -41,7 +41,6 @@ class _BodyState extends State<Body> {
   void dispose() {
     _playController.dispose();
     super.dispose();
-    _playController.addListener(() {});
   }
 
   @override
@@ -55,7 +54,6 @@ class _BodyState extends State<Body> {
           playedColor: Colors.amber,
           handleColor: Colors.amberAccent,
         ),
-        onReady: () {},
       ),
       builder: (BuildContext ctx, Widget ply) {
         return Column(
@@ -67,9 +65,11 @@ class _BodyState extends State<Body> {
               videoTitle: widget.title,
               description: widget.description,
             ),
-            DownloadInfoList(
-              title: widget.title,
-              videoId: widget.id,
+            Expanded(
+              child: DownloadInfoList(
+                title: widget.title,
+                videoId: widget.id,
+              ),
             )
           ],
         );

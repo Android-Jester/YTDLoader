@@ -8,5 +8,6 @@ class DownloadInfoModel extends DownloadInfo {
     required super.videoSize,
     required super.bitRates,
     required super.videoId,
+    required super.sizeType,
   });
 }

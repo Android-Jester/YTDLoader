@@ -1,3 +1,4 @@
+import 'package:down_yt/app/core/api.dart';
 import 'package:down_yt/features/downloader/presentation/bloc/downloader_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,24 +18,35 @@ class DownloadInfoList extends StatefulWidget {
 }
 
 class _DownloadInfoListState extends State<DownloadInfoList> {
+  String _suffix(VideoSize sizeType) {
+    switch (sizeType) {
+      case VideoSize.giga:
+        return 'GB';
+      case VideoSize.mega:
+        return 'MB';
+      case VideoSize.kilo:
+        return 'KB';
+      case VideoSize.byte:
+        return 'B';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DownloaderBloc, DownloaderState>(
       builder: (ctx, state) {
         if (state is DownloadInfoDataGet) {
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: ListView.builder(
-                itemCount: state.info.length,
-                itemBuilder: (ctx, index) {
-                  final itemInfo = state.info[index];
-                  return ListTile(
-                    title: Text(widget.title),
-                    subtitle: Text('${itemInfo.mediaCodec}||${itemInfo.quality}'),
-                    trailing: Text(itemInfo.videoSize.toString()),
-                  );
-                }),
-          );
+          print("info");
+          return ListView.builder(
+              itemCount: state.info.length,
+              itemBuilder: (ctx, index) {
+                final itemInfo = state.info[index];
+                return ListTile(
+                  title: Text(widget.title),
+                  subtitle: Text('${itemInfo.mediaCodec}||${itemInfo.quality}'),
+                  trailing: Text('${itemInfo.videoSize.toStringAsFixed(2)} ${_suffix(itemInfo.sizeType)}'),
+                );
+              });
         } else if (state is InfoCollectFailure) {
           return Center(
             child: Text(state.errorMessage),
