@@ -19,7 +19,7 @@ class GetDownloadInfo extends ActivityUseCase<List<DownloadInfo>, DownloadParams
 }
 
 class DownloadParams extends Equatable {
-  DownloadParams({
+  const DownloadParams({
     required this.videoId,
     required this.title,
   });

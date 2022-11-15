@@ -8,6 +8,12 @@ environment:
   flutter: 3.3.6
 
 dependencies:
+  # Android Path
+  android_path_provider: ^0.3.0
+
+  # Notification Manager
+  awesome_notifications: ^0.7.4+1
+  
   # Dart State Management
   bloc: ^8.1.0
 
@@ -50,6 +56,7 @@ dependencies:
 
   # Gets Permissions on Android devices
   permission_handler: ^10.0.0
+  saf: ^1.0.3+4
 
   # Webview with other features
   webviewx: ^0.2.1

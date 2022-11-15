@@ -20,3 +20,14 @@ class DownloadInfoDataGet extends DownloaderState {
 
   final List<DownloadInfo> info;
 }
+
+class DownloadingItems extends DownloaderState {
+  const DownloadingItems(this.progress);
+
+  final double progress;
+}
+
+class DownloadingError extends DownloaderState {
+  const DownloadingError(this.errorMessage);
+  final String errorMessage;
+}

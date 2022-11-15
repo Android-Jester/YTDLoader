@@ -8,3 +8,14 @@ abstract class Failure extends Equatable {
 
   final String errorMessage;
 }
+
+class NetworkFailure implements Failure {
+  @override
+  String get errorMessage => 'Unable to connect to the internet';
+
+  @override
+  List<Object?> get props => [errorMessage];
+
+  @override
+  bool? get stringify => false;
+}

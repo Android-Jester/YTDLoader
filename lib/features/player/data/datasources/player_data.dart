@@ -100,7 +100,6 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
       }
       return videoDataList;
     } catch (e) {
-      print(e);
       throw VideoDataException();
     }
   }

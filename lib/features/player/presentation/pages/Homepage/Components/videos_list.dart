@@ -27,7 +27,7 @@ class VideoList extends StatelessWidget {
           actionOnLongTap: () {},
           actionOnTap: () => Navigator.push(
             ctx,
-            MaterialPageRoute(
+            MaterialPageRoute<VideoPlayer>(
               builder: (ctx) {
                 ctx.read<DownloaderBloc>().add(
                       GetDownloadItemInfo(

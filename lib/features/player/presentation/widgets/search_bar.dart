@@ -29,38 +29,39 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return BlocListener<SearchBloc, SearchState>(
-        child: Container(
-          height: 50,
-          margin: const EdgeInsets.symmetric(horizontal: 10),
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(15)),
-            border: Border.all(
-              width: 1.5,
-              color: Colors.blue,
-            ),
+      child: Container(
+        height: 50,
+        margin: const EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
+          border: Border.all(
+            width: 1.5,
+            color: Colors.blue,
           ),
-          child: TextField(
-            focusNode: node,
-            // onChanged: onSubmit,
-            onEditingComplete: () => onSubmit(searchController.text),
-            controller: searchController,
-            textAlignVertical: TextAlignVertical.center,
-            decoration: InputDecoration(
-              alignLabelWithHint: true,
-              border: const OutlineInputBorder(
-                borderSide: BorderSide.none,
-              ),
-              suffix: IconButton(
-                onPressed: () => onSubmit(searchController.text),
-                icon: const Icon(Icons.search),
-              ),
+        ),
+        child: TextField(
+          focusNode: node,
+          // onChanged: onSubmit,
+          onEditingComplete: () => onSubmit(searchController.text),
+          controller: searchController,
+          textAlignVertical: TextAlignVertical.center,
+          decoration: InputDecoration(
+            alignLabelWithHint: true,
+            border: const OutlineInputBorder(
+              borderSide: BorderSide.none,
+            ),
+            suffix: IconButton(
+              onPressed: () => onSubmit(searchController.text),
+              icon: const Icon(Icons.search),
             ),
           ),
         ),
-        listener: (ctx, state) {
-          if (state is SearchInitial) {
-            searchController.clear();
-          }
-        });
+      ),
+      listener: (ctx, state) {
+        if (state is SearchInitial) {
+          searchController.clear();
+        }
+      },
+    );
   }
 }

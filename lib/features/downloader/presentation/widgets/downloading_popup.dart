@@ -36,17 +36,20 @@ class _DownloadInfoListState extends State<DownloadInfoList> {
     return BlocBuilder<DownloaderBloc, DownloaderState>(
       builder: (ctx, state) {
         if (state is DownloadInfoDataGet) {
-          print("info");
           return ListView.builder(
-              itemCount: state.info.length,
-              itemBuilder: (ctx, index) {
-                final itemInfo = state.info[index];
-                return ListTile(
-                  title: Text(widget.title),
-                  subtitle: Text('${itemInfo.mediaCodec}||${itemInfo.quality}'),
-                  trailing: Text('${itemInfo.videoSize.toStringAsFixed(2)} ${_suffix(itemInfo.sizeType)}'),
-                );
-              });
+            itemCount: state.info.length,
+            itemBuilder: (ctx, index) {
+              final itemInfo = state.info[index];
+              return ListTile(
+                onTap: () {
+                  ctx.read<DownloaderBloc>().add(DownloadItem(info: itemInfo));
+                },
+                title: Text(widget.title),
+                subtitle: Text('${itemInfo.mediaCodec}||${itemInfo.quality}'),
+                trailing: Text('${itemInfo.videoSize.toStringAsFixed(2)} ${_suffix(itemInfo.sizeType)}'),
+              );
+            },
+          );
         } else if (state is InfoCollectFailure) {
           return Center(
             child: Text(state.errorMessage),

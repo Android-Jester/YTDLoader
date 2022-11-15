@@ -16,7 +16,22 @@ class GetDownloadItemInfo implements DownloaderEvent {
   final String title;
 
   @override
-  List<Object> get props => [title, videoId];
+  List<Object> get props => [
+        title,
+        videoId,
+      ];
+
+  @override
+  bool? get stringify => false;
+}
+
+class DownloadItem implements DownloaderEvent {
+  DownloadItem({
+    required this.info,
+  });
+  final DownloadInfo info;
+  @override
+  List<Object> get props => [];
 
   @override
   bool? get stringify => false;

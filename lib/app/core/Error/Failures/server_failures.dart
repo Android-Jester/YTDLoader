@@ -20,7 +20,6 @@ class DownloadInfoFailure implements Failure {
   List<Object?> get props => [errorMessage];
 
   @override
-  // TODO: implement stringify
   bool? get stringify => false;
 }
 

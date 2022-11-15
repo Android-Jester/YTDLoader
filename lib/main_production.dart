@@ -9,5 +9,7 @@ import 'package:down_yt/app/app.dart';
 import 'package:down_yt/bootstrap.dart';
 
 void main() {
-  bootstrap(() => const App());
+  bootstrap(() async {
+    return const App();
+  });
 }

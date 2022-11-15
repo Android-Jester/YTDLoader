@@ -7,7 +7,11 @@
 
 import 'package:down_yt/app/app.dart';
 import 'package:down_yt/bootstrap.dart';
+import 'package:flutter/material.dart';
 
 void main() {
-  bootstrap(() => const App());
+  bootstrap(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    return const App();
+  });
 }

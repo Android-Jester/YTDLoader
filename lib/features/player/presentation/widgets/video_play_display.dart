@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
 class VideoInfoWidget extends StatefulWidget {
-  final String channelImageUrl;
-  final String videoTitle;
-  final String channelName;
-  final String description;
   const VideoInfoWidget({
     super.key,
     required this.channelImageUrl,
@@ -12,6 +8,10 @@ class VideoInfoWidget extends StatefulWidget {
     required this.channelName,
     required this.description,
   });
+  final String channelImageUrl;
+  final String videoTitle;
+  final String channelName;
+  final String description;
 
   @override
   State<VideoInfoWidget> createState() => _VideoInfoWidgetState();

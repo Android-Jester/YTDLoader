@@ -7,6 +7,7 @@ import 'package:down_yt/app/core/network/network_checker.dart';
 import 'package:down_yt/features/downloader/data/datasources/youtube_script.dart';
 import 'package:down_yt/features/downloader/domain/entities/download_info.dart';
 import 'package:down_yt/features/downloader/domain/repositories/download_repo.dart';
+import 'package:saf/saf.dart';
 
 class DownloadImpl implements DownloaderRepo {
   DownloadImpl({
@@ -17,35 +18,50 @@ class DownloadImpl implements DownloaderRepo {
   final NetworkChecker netChecker;
   final YoutubeDownloadData downloadData;
 
+  
+
   @override
-  Future<double> downloadObject(DownloadInfo info, String downloadLocation) async {
-    var progress = 0.0;
+  Future<Either<Failure, double>> downloadObject(
+    DownloadInfo info,
+    String downloadLocation,
+  ) async {
+    final saf = Saf('~/Downloads');
+    final isGranted = await saf.getDirectoryPermission();
+    var fileBytesDownloaded = 0;
+    if (isGranted != null || isGranted!) {
+      if (await netChecker.isConnected) {
+        var newProgress = 0;
 
-    final streamInfo = await downloadData.getDownloadStream(info);
-    final stream = youtube.videos.streamsClient.get(streamInfo);
+        final streamInfo = await downloadData.getDownloadStream(info);
+        final stream = youtube.videos.streamsClient.get(streamInfo);
+        final fileName = '${info.itemName}.${info.mediaCodec.split('/').last}';
+        final file = File('$downloadLocation/$fileName');
+        final fileStream = file.openWrite();
 
-    final file = File("downloadLocation/${info.itemName}.${info.mediaCodec.split('/').last}");
-    if (file.existsSync()) {
-      file.deleteSync();
+        // Pipe all the content of the stream into the file.
+        stream.listen((event) async {
+          fileStream.add(event);
+          fileBytesDownloaded += event.length;
+          newProgress = (fileBytesDownloaded / info.videoSize * 100).floor();
+        });
+
+        // Close the file.
+        await fileStream.flush();
+        await fileStream.close();
+        return Right(newProgress.toDouble());
+      } else {
+        return Left(NetworkFailure());
+      }
+    } else {
+      return Left(DownloadFailure());
     }
-    final fileStream = file.openWrite(mode: FileMode.writeOnlyAppend);
-    var count = 0;
-    await for (final data in stream) {
-      // Keep track of the current downloaded data.
-      count += data.length;
-      // Calculate the current progress.
-      progress = count / info.videoSize;
-
-      // Write to file.
-      fileStream.add(data);
-      return progress;
-    }
-    await fileStream.close();
-    return progress;
   }
 
   @override
-  Future<Either<Failure, List<DownloadInfo>>> getDownloadInfo(String url, String title) async {
+  Future<Either<Failure, List<DownloadInfo>>> getDownloadInfo(
+    String url,
+    String title,
+  ) async {
     try {
       if (await netChecker.isConnected) {
         final model = await downloadData.getDownloadInfo(url, title);

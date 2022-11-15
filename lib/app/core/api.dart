@@ -1,7 +1,7 @@
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 YoutubeExplode youtube = YoutubeExplode();
-const apiKey = 'AIzaSyD-cX8EpJKa1RWq6EzrxfrHK-K7qSB8kPk';
+const CHANNEL_ID = 'down_yt';
 
 enum VideoFilter {
   video,

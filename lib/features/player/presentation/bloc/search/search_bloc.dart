@@ -20,11 +20,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   ) async {
     emit(SearchLoading());
     final searchResult = await search(
-        params: VideoSearchQuery(
-      event.searchQuery,
-      filter: event.filter,
-      firstSearch: event.firstSearch,
-    ));
+      params: VideoSearchQuery(
+        event.searchQuery,
+        filter: event.filter,
+        firstSearch: event.firstSearch,
+      ),
+    );
     searchResult.fold(
       (failure) => emit(SearchFailed(failure.errorMessage)),
       (result) => emit(SearchInitial(info: result)),
