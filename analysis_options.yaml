@@ -5,3 +5,4 @@ linter:
     lines_longer_than_80_chars: false
     avoid_positional_boolean_parameters: false
     one_member_abstracts: false
+    prefer_if_elements_to_conditional_expressions: false

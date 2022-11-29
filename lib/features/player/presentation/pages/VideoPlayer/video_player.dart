@@ -1,39 +1,30 @@
-import 'package:down_yt/features/player/presentation/pages/VideoPlayer/components/body.dart';
+import 'package:down_yt/features/downloader/presentation/widgets/downloading_popup.dart';
+import 'package:down_yt/features/player/presentation/bloc/player/player_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pip_view/pip_view.dart';
 
-class VideoPlayer extends StatefulWidget {
+part './components/body.dart';
+
+class VideoPlayer extends StatelessWidget {
   const VideoPlayer({
     super.key,
-    required this.id,
-    required this.title,
-    required this.author,
     required this.description,
-    required this.channelImageUrl,
+    required this.channelId,
     this.isLive = false,
   });
 
-  final String id;
-  final String title;
-  final String author;
   final String description;
+  final String channelId;
   final bool isLive;
-  final String channelImageUrl;
 
-  @override
-  State<VideoPlayer> createState() => _VideoPlayerState();
-}
-
-class _VideoPlayerState extends State<VideoPlayer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Body(
-        title: widget.title,
-        channelImageUrl: widget.channelImageUrl,
-        author: widget.author,
-        description: widget.description,
-        isLive: widget.isLive,
-        id: widget.id,
+        channelId: channelId,
+        description: description,
+        isLive: isLive,
       ),
     );
   }

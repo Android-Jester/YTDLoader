@@ -50,7 +50,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.joker.down_yt"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -73,6 +73,9 @@ android {
                 storePassword keystoreProperties['storePassword']
             }
         }
+    }
+    packagingOptions {
+        pickFirst 'lib/**/libc++_shared.so'
     }
 
     flavorDimensions "default"
@@ -99,6 +102,8 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt')
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                 'proguard-rules.pro'
         }
         debug {
             signingConfig signingConfigs.debug

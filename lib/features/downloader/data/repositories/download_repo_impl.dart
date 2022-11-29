@@ -7,7 +7,7 @@ import 'package:down_yt/app/core/network/network_checker.dart';
 import 'package:down_yt/features/downloader/data/datasources/youtube_script.dart';
 import 'package:down_yt/features/downloader/domain/entities/download_info.dart';
 import 'package:down_yt/features/downloader/domain/repositories/download_repo.dart';
-import 'package:saf/saf.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class DownloadImpl implements DownloaderRepo {
   DownloadImpl({
@@ -18,17 +18,16 @@ class DownloadImpl implements DownloaderRepo {
   final NetworkChecker netChecker;
   final YoutubeDownloadData downloadData;
 
-  
-
   @override
   Future<Either<Failure, double>> downloadObject(
     DownloadInfo info,
     String downloadLocation,
   ) async {
-    final saf = Saf('~/Downloads');
-    final isGranted = await saf.getDirectoryPermission();
+    var storagePermission = await Permission.accessMediaLocation.request();
+    // final saf = Saf('~/Downloads');
+    // final isGranted = await saf.getDirectoryPermission();
     var fileBytesDownloaded = 0;
-    if (isGranted != null || isGranted!) {
+    if (storagePermission.isGranted) {
       if (await netChecker.isConnected) {
         var newProgress = 0;
 
@@ -53,6 +52,7 @@ class DownloadImpl implements DownloaderRepo {
         return Left(NetworkFailure());
       }
     } else {
+      await Permission.accessMediaLocation.request();
       return Left(DownloadFailure());
     }
   }

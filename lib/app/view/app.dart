@@ -4,7 +4,7 @@ import 'package:down_yt/app/view/themes.dart';
 import 'package:down_yt/features/downloader/presentation/bloc/downloader_bloc.dart';
 import 'package:down_yt/features/player/presentation/bloc/player/player_bloc.dart';
 import 'package:down_yt/features/player/presentation/bloc/search/search_bloc.dart';
-import 'package:down_yt/features/player/presentation/pages/Homepage/homepage.dart';
+import 'package:down_yt/features/player/presentation/pages/Search/homepage.dart';
 import 'package:down_yt/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +20,7 @@ class App extends StatelessWidget {
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
-
+    // final colorGen = coloring.Hct.fromInt(0xFF2485F4);
     return MultiBlocProvider(
       providers: [
         BlocProvider<PlayerBloc>(

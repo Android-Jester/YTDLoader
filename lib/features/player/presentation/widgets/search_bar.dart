@@ -31,37 +31,57 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
     return BlocListener<SearchBloc, SearchState>(
       child: Container(
         height: 50,
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(15)),
-          border: Border.all(
-            width: 1.5,
-            color: Colors.blue,
-          ),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          // border: Border.all(
+          //   width: 1.5,
+          //   color: Colors.blue,
+          // ),
         ),
-        child: TextField(
-          focusNode: node,
-          // onChanged: onSubmit,
-          onEditingComplete: () => onSubmit(searchController.text),
-          controller: searchController,
-          textAlignVertical: TextAlignVertical.center,
-          decoration: InputDecoration(
-            alignLabelWithHint: true,
-            border: const OutlineInputBorder(
-              borderSide: BorderSide.none,
+        child: Row(
+          children: [
+            Expanded(
+              child: SizedBox(
+                height: 50,
+                child: TextField(
+                  focusNode: node,
+                  // onChanged: onSubmit,
+                  onEditingComplete: () => onSubmit(searchController.text),
+                  controller: searchController,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  // textAlignVertical: TextAlignVertical.center,
+                  decoration: InputDecoration(
+                    alignLabelWithHint: true,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+                    border: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(Radius.circular(15)),
+                      borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 1.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
-            suffix: IconButton(
-              onPressed: () => onSubmit(searchController.text),
-              icon: const Icon(Icons.search),
+            const SizedBox(
+              width: 5,
             ),
-          ),
+            DecoratedBox(
+              decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondaryContainer, borderRadius: BorderRadius.circular(15)),
+              child: IconButton(
+                onPressed: () => onSubmit(searchController.text),
+                icon: Icon(
+                  Icons.search,
+                  textDirection: TextDirection.ltr,
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
-      listener: (ctx, state) {
-        if (state is SearchInitial) {
-          searchController.clear();
-        }
-      },
+      listener: (ctx, state) {},
     );
   }
 }

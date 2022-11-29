@@ -36,17 +36,43 @@ class _DownloadInfoListState extends State<DownloadInfoList> {
     return BlocBuilder<DownloaderBloc, DownloaderState>(
       builder: (ctx, state) {
         if (state is DownloadInfoDataGet) {
-          return ListView.builder(
+          return GridView.builder(
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200,
+            ),
             itemCount: state.info.length,
             itemBuilder: (ctx, index) {
               final itemInfo = state.info[index];
-              return ListTile(
+              final textInfo = itemInfo.mediaCodec.split('/');
+              return Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                height: 80,
+                width: 50,
+                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                child: Center(
+                  child: Column(
+                    children: [
+                      Text(textInfo.first),
+                      Text(textInfo.last),
+                      Text(
+                        '${itemInfo.videoSize.toStringAsFixed(2)}.${_suffix(itemInfo.sizeType)}',
+                      ),
+                    ],
+                  ),
+                ),
+              );
+
+              ListTile(
                 onTap: () {
                   ctx.read<DownloaderBloc>().add(DownloadItem(info: itemInfo));
                 },
                 title: Text(widget.title),
                 subtitle: Text('${itemInfo.mediaCodec}||${itemInfo.quality}'),
-                trailing: Text('${itemInfo.videoSize.toStringAsFixed(2)} ${_suffix(itemInfo.sizeType)}'),
+                trailing: Text(
+                    '${itemInfo.videoSize.toStringAsFixed(2)} ${_suffix(itemInfo.sizeType)}'),
               );
             },
           );

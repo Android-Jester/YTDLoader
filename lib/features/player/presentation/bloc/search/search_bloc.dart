@@ -3,12 +3,13 @@ import 'package:down_yt/app/core/api.dart';
 import 'package:down_yt/features/player/domain/entities/video_info.dart';
 import 'package:down_yt/features/player/domain/usecases/search_videos.dart';
 import 'package:equatable/equatable.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  SearchBloc({required this.search}) : super(const SearchInitial(info: [])) {
+  SearchBloc({required this.search}) : super(StateStarted()) {
     on<SearchingVideos>(getSearchResult);
   }
 
@@ -22,8 +23,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     final searchResult = await search(
       params: VideoSearchQuery(
         event.searchQuery,
-        filter: event.filter,
-        firstSearch: event.firstSearch,
+        filter: TypeFilters.video,
       ),
     );
     searchResult.fold(

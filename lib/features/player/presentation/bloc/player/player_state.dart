@@ -7,12 +7,30 @@ abstract class PlayerState extends Equatable {
   List<Object> get props => [];
 }
 
+class PlayerInitial implements PlayerState {
+  @override
+  List<Object> get props => [];
 
+  @override
+  bool? get stringify => false;
+}
 
-class StartPlayer extends PlayerState {}
+class PlayerStatus implements PlayerState {
+  PlayerStatus({required this.bloc, this.isAlive = true}) {
+    bloc.podPlayer = PodVideoPlayer(controller: bloc.podController);
+    if (isAlive) {
+      bloc.miniController.animateToHeight(state: PanelState.MAX);
+    } else {
+      bloc.podController.pause();
+      bloc.podController.dispose();
+    }
+  }
+  final PlayerBloc bloc;
+  final bool isAlive;
 
-class StopPlayer extends PlayerState {}
+  @override
+  List<Object> get props => [];
 
-class PausePlayer extends PlayerState {}
-
-class PlayerInitial extends PlayerState {}
+  @override
+  bool? get stringify => false;
+}

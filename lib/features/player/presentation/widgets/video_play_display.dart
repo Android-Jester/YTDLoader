@@ -1,17 +1,16 @@
+import 'package:down_yt/features/player/presentation/widgets/video_info/channel_image.dart';
 import 'package:flutter/material.dart';
 
 class VideoInfoWidget extends StatefulWidget {
   const VideoInfoWidget({
     super.key,
-    required this.channelImageUrl,
     required this.videoTitle,
     required this.channelName,
-    required this.description,
+    required this.channelId,
   });
-  final String channelImageUrl;
   final String videoTitle;
   final String channelName;
-  final String description;
+  final String channelId;
 
   @override
   State<VideoInfoWidget> createState() => _VideoInfoWidgetState();
@@ -24,10 +23,7 @@ class _VideoInfoWidgetState extends State<VideoInfoWidget> {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 25,
-            foregroundImage: NetworkImage(widget.channelImageUrl),
-          ),
+          ChannelImage(channelId: widget.channelId),
           Padding(
             padding: const EdgeInsets.only(left: 15),
             child: Column(

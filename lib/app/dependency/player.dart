@@ -8,11 +8,7 @@ Future<void> playerInject() async {
         search: locator.get<SearchVideos>(),
       ),
     )
-    ..registerFactory<PlayerBloc>(() => 
-    PlayerBloc(
-      videoData: locator.get<GetVideoData>(),
-          comments: locator.get<GetVideoComments>(),
-        ),)
+    ..registerFactory<PlayerBloc>(PlayerBloc.new,)
 
     // Data Source
     ..registerLazySingleton<YoutubePlayerData>(YoutubePlayerDataImpl.new)
@@ -25,16 +21,16 @@ Future<void> playerInject() async {
     )
 
     // UseCases
-    ..registerSingleton<GetVideoData>(
-      GetVideoData(
-        locator.get<PlayerRepo>(),
-      ),
-    )
-    ..registerSingleton<GetVideoComments>(
-      GetVideoComments(
-        locator.get<PlayerRepo>(),
-      ),
-    )
+    // ..registerSingleton<GetVideoData>(
+    //   GetVideoData(
+    //     locator.get<PlayerRepo>(),
+    //   ),
+    // )
+    // ..registerSingleton<GetVideoComments>(
+    //   GetVideoComments(
+    //     locator.get<PlayerRepo>(),
+    //   ),
+    // )
     ..registerSingleton<SearchVideos>(
       SearchVideos(
         locator.get<PlayerRepo>(),

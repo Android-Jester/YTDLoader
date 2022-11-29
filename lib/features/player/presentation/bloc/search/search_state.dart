@@ -7,6 +7,8 @@ abstract class SearchState extends Equatable {
   List<Object> get props => [];
 }
 
+class StateStarted extends SearchState {}
+
 class SearchFailed extends SearchState {
   const SearchFailed(this.errorMessage);
 
@@ -14,11 +16,6 @@ class SearchFailed extends SearchState {
 }
 
 class SearchLoading extends SearchState {}
-
-// class SearchFinalized extends PlayerState {
-//   const SearchFinalized({required this.searchResult});
-//   final List<VideoInfo> searchResult;
-// }
 
 class SearchInitial extends SearchState {
   const SearchInitial({required this.info});
