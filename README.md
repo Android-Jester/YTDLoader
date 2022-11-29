@@ -171,6 +171,9 @@ Update the `CFBundleLocalizations` array in the `Info.plist` at `ios/Runner/Info
 | PIP View                    | https://pub.dev/packages/miniplayer                  | Enabling PIP View In-App                                                                                                                  |
 | Pod Player                  | https://pub.dev/packages/miniplayer                  | Video Player                                                                                                                              |
 | WebViewX                    | https://pub.dev/packages/miniplayer                  | Webview                                                                                                                                   |
+
+
+
 [coverage_badge]: coverage_badge.svg
 [flutter_localizations_link]: https://api.flutter.dev/flutter/flutter_localizations/flutter_localizations-library.html
 [internationalization_link]: https://flutter.dev/docs/development/accessibility-and-localization/internationalization
