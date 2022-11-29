@@ -31,7 +31,7 @@ $ flutter run --flavor staging --target lib/main_staging.dart
 $ flutter run --flavor production --target lib/main_production.dart
 ```
 
-# THIS Project App only works on Android and/or Linux
+# THIS Project App only works on Android
 
 ---
 
