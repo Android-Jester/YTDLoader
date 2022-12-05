@@ -5,6 +5,7 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:down_yt/app/app.dart';
 import 'package:down_yt/bootstrap.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +14,11 @@ import 'package:flutter/services.dart';
 void main() {
   bootstrap(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: SystemUiOverlay.values);
+    await SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: SystemUiOverlay.values,
+    );
+    await AwesomeNotifications().initialize('resource://drawable/app_icon', []);
     return App();
   });
 }

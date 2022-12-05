@@ -15,7 +15,7 @@ class PlayerRepoImpl implements PlayerRepo {
   final NetworkChecker internetStatus;
   final YoutubePlayerData videoData;
   @override
-  Future<Either<Failure, List<VideoInfo>>> videoSearch(
+  Future<Either<Failure, List<SearchInfo>>> videoSearch(
     String query,
     SearchFilter filter,
   ) async {

@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 void main() {
-  final worker = WorkerIsolate();
+  final worker = PlayerWorkerIsolate();
 
   test('starts up', () async {
     await worker.isReady;

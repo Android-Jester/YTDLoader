@@ -20,7 +20,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
   late PodPlayerController podController;
   late PodVideoPlayer podPlayer;
   MiniplayerController miniController = MiniplayerController();
-  late VideoInfo info;
+  late SearchInfo info;
 
   void _startVideo(PlayVideo event, Emitter<PlayerState> emit) {
     miniController.animateToHeight(state: PanelState.MAX);

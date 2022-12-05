@@ -9,5 +9,6 @@ class DownloadInfoModel extends DownloadInfo {
     required super.bitRates,
     required super.videoId,
     required super.sizeType,
+    required super.stream,
   });
 }

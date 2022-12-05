@@ -4,7 +4,7 @@ import 'package:down_yt/features/player/domain/entities/video_info.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 abstract class PlayerRepo {
-  Future<Either<Failure, List<VideoInfo>>> videoSearch(
+  Future<Either<Failure, List<SearchInfo>>> videoSearch(
     String query,
     SearchFilter filter,
   );

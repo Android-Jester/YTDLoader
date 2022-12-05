@@ -12,7 +12,7 @@ class VideoList extends StatefulWidget {
     required this.info,
     super.key,
   });
-  final List<VideoInfo> info;
+  final List<SearchInfo> info;
 
   @override
   State<VideoList> createState() => _VideoListState();
@@ -45,7 +45,7 @@ class _VideoListState extends State<VideoList> {
               ..miniController.animateToHeight(state: PanelState.MAX)
               ..podController = PodPlayerController(
                 playVideoFrom: PlayVideoFrom.youtube(
-                  data.videoUrl,
+                  data.itemUrl,
                   live: data.isLive,
                   videoPlayerOptions: VideoPlayerOptions(
                     allowBackgroundPlayback: true,
@@ -63,7 +63,7 @@ class _VideoListState extends State<VideoList> {
             ctx.read<DownloaderBloc>().add(
                   GetDownloadItemInfo(
                     title: data.title,
-                    videoId: data.videoUrl.split('=').last,
+                    videoId: data.itemUrl.split('=').last,
                   ),
                 );
           },

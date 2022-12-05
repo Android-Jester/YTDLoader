@@ -6,11 +6,11 @@ import 'package:down_yt/features/player/domain/repositories/player_repo.dart';
 import 'package:equatable/equatable.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
-class SearchVideos extends ActivityUseCase<List<VideoInfo>, VideoSearchQuery> {
+class SearchVideos extends ActivityUseCase<List<SearchInfo>, VideoSearchQuery> {
   SearchVideos(this.repo);
   final PlayerRepo repo;
   @override
-  Future<Either<Failure, List<VideoInfo>>> call({
+  Future<Either<Failure, List<SearchInfo>>> call({
     required VideoSearchQuery params,
   }) {
     return repo.videoSearch(

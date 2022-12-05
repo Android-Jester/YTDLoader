@@ -44,12 +44,12 @@ class _BodyState extends State<Body> with AutomaticKeepAliveClientMixin {
         return Column(
           children: [
             bloc.podPlayer,
-              Expanded(
-                      child: DownloadInfoList(
-                        title: bloc.info.title,
-                        videoId: bloc.info.videoUrl.split('=').last,
-                      ),
+            Expanded(
+              child: DownloadInfoList(
+                title: bloc.info.title,
+                videoId: bloc.info.itemUrl.split('=').last,
               ),
+            ),
           ],
         );
       },

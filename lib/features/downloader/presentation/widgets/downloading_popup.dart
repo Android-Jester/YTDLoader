@@ -30,7 +30,6 @@ class _DownloadInfoListState extends State<DownloadInfoList> {
         return 'B';
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DownloaderBloc, DownloaderState>(
@@ -51,7 +50,7 @@ class _DownloadInfoListState extends State<DownloadInfoList> {
                 ),
                 height: 80,
                 width: 50,
-                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                 child: Center(
                   child: Column(
                     children: [
@@ -72,7 +71,8 @@ class _DownloadInfoListState extends State<DownloadInfoList> {
                 title: Text(widget.title),
                 subtitle: Text('${itemInfo.mediaCodec}||${itemInfo.quality}'),
                 trailing: Text(
-                    '${itemInfo.videoSize.toStringAsFixed(2)} ${_suffix(itemInfo.sizeType)}'),
+                  '${itemInfo.videoSize.toStringAsFixed(2)} ${_suffix(itemInfo.sizeType)}',
+                ),
               );
             },
           );

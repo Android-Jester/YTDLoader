@@ -6,22 +6,21 @@ import 'package:down_yt/app/core/api.dart';
 import 'package:down_yt/features/player/data/models/video_model.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
-class WorkerIsolate {
-  WorkerIsolate() {
+class PlayerWorkerIsolate {
+  PlayerWorkerIsolate() {
     _init();
   }
-
   late SendPort _mainIsolateSendPort;
   late Isolate _secondIsolate;
   final _secondIsolateReady = Completer<void>();
 
-  late Completer<List<VideoSearchModel>> _data;
+  late Completer<List<SearchModel>> _data;
 
-  Future<List<VideoSearchModel>> getVideoSearchList(String query, SearchFilter filter) async {
+  Future<List<SearchModel>> getVideoSearchList(String query, SearchFilter filter) async {
     // gets the message from the main isolate and sends it to the spawned isolate
     final data = YoutubeSearchQuery(query: query, filter: filter);
     _mainIsolateSendPort.send(data);
-    _data = Completer<List<VideoSearchModel>>();
+    _data = Completer<List<SearchModel>>();
     // we return the message obtained from the receivingPort as a future
     return _data.future;
   }
@@ -55,40 +54,63 @@ class WorkerIsolate {
   static void _getYoutubeData(dynamic message) {
     late SendPort returnSendPort;
 
-    final searchModel = <VideoSearchModel>[];
+    final searchModel = <SearchModel>[];
 
     /// This receive port listens to the message from the main isolate and sends it to
     final listeningReceivePort = ReceivePort()
       ..listen((message) async {
         try {
           if (message is YoutubeSearchQuery) {
-            final searchData = await youtube.search.search(message.query, filter: message.filter);
-            var isLast = false;
-            while (searchData.length < 100) {
-              try {
-                searchData.addAll((await searchData.nextPage())!);
-                print(searchData.length);
-              } catch (e) {
-                isLast = true;
-              }
-            }
-            for (final video in searchData) {
-              print("looping");
-              final channel = await youtube.channels.get(video.channelId.value);
-              searchModel.add(
-                VideoSearchModel(
-                  title: video.title,
-                  length: (video.isLive && video.duration == null) ? const Duration(seconds: 1) : video.duration!,
-                  videoUrl: video.url,
-                  imageUrl: video.thumbnails.highResUrl,
-                  isLive: video.isLive,
-                  description: video.description,
-                  channelName: channel.title,
-                  channelImage: channel.logoUrl,
-                ),
+            final playListSearch = (await youtube.search.searchContent(message.query, filter: message.filter) as SearchList<SearchPlaylist>).map((playlistItem) {
+              final playListId = playlistItem.playlistId.value;
+              print('playlist');
+              return SearchModel(
+                itemTitle: playlistItem.playlistTitle,
+                itemUrl: 'https://youtube.com/playlist?list=$playListId',
+                imageUrl: playlistItem.thumbnails.first.url.path,
+                isPlayList: true,
+                playlistId: playListId,
+                playListLength: playlistItem.playlistVideoCount,
               );
+            }).toList();
+            final channelSearch = (await youtube.search.searchContent(message.query, filter: message.filter) as SearchList<SearchChannel>).map((channelItem) async {
+              final channel = await youtube.channels.get(channelItem.id);
+              return SearchModel(
+                itemTitle: '',
+                itemUrl: channel.url,
+                imageUrl: '',
+                channelImage: channel.logoUrl,
+                channelName: channelItem.name,
+                description: channelItem.description,
+              );
+            }).toList();
+            final videoSearch = (await youtube.search.searchContent(message.query, filter: message.filter) as SearchList<SearchVideo>).map((videoItem) async {
+              final channel = await youtube.channels.get(videoItem.id);
+              final video = await youtube.videos.get(videoItem.id);
+              return SearchModel(
+                itemTitle: videoItem.title,
+                itemUrl: 'https://www.youtube.com/watch?v=${videoItem.id.value}',
+                imageUrl: videoItem.thumbnails.where((element) => element.height > 250).first.url.path,
+                channelImage: channel.logoUrl,
+                channelName: channel.title,
+                description: videoItem.description,
+                isLive: videoItem.isLive,
+                videoLength: video.duration!,
+              );
+            }).toList();
+
+            final searchData = <SearchModel>[];
+            for (final item in videoSearch) {
+              searchData.add(await item);
             }
-            print("loop finished");
+            for (final item in playListSearch) {
+              searchData.add(item);
+            }
+            for (final item in channelSearch) {
+              searchData.add(await item);
+            }
+
+            print('loop finished');
             returnSendPort.send(searchModel);
           }
         } catch (e) {
@@ -119,7 +141,7 @@ class WorkerIsolate {
       _secondIsolateReady.complete();
       return;
     }
-    if (secondIsolateMessage is List<VideoSearchModel>) {
+    if (secondIsolateMessage is List<SearchModel>) {
       _data.complete(secondIsolateMessage);
     }
   }

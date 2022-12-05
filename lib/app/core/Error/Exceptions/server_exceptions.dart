@@ -8,8 +8,8 @@ class VideoSearchException implements Exceptions {
   String get errormessage => message;
 }
 
-class VideoStreamException implements Exceptions {
-  VideoStreamException({required this.message});
+class VideoDownloadException implements Exceptions {
+  VideoDownloadException({required this.message});
   final String message;
 
   @override

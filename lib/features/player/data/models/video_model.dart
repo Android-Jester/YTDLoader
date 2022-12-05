@@ -1,17 +1,22 @@
 import 'package:down_yt/features/player/domain/entities/video_info.dart';
 
-class VideoSearchModel extends VideoInfo {
-  VideoSearchModel({
+class SearchModel extends SearchInfo {
+  SearchModel({
     // Video Details
-    required super.title,
-    required super.length,
-    required super.videoUrl,
+    required super.itemTitle,
+    super.description,
+    super.videoLength,
+    required super.itemUrl,
     required super.imageUrl,
-    required super.isLive,
-    required super.description,
+    super.isLive,
 
     // Channel Data
-    required super.channelName,
-    required super.channelImage,
+    super.channelName,
+    super.channelImage,
+
+    // PlayList Data
+    super.isPlayList,
+    super.playListLength,
+    super.playlistId,
   });
 }

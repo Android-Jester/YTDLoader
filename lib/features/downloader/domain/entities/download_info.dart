@@ -1,5 +1,6 @@
 import 'package:down_yt/app/core/api.dart';
 import 'package:equatable/equatable.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class DownloadInfo extends Equatable {
   const DownloadInfo({
@@ -10,6 +11,7 @@ class DownloadInfo extends Equatable {
     required this.bitRates,
     required this.videoId,
     required this.sizeType,
+    required this.stream,
   });
 
   // Mixed
@@ -17,6 +19,7 @@ class DownloadInfo extends Equatable {
   final String quality;
   final String mediaCodec;
   final String videoId;
+  final StreamInfo stream;
 
   // Video
   final double videoSize;

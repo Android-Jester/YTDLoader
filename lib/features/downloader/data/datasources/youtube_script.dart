@@ -13,43 +13,6 @@ abstract class YoutubeDownloadData {
 class YoutubeDownloaderData implements YoutubeDownloadData {
   VideoSize sizeType = VideoSize.byte;
 
-  /// Obtains the download info
-  @override
-  Future<List<DownloadInfoModel>> getDownloadInfo(
-      String url, String title,) async {
-    final videoManifest = await youtube.videos.streamsClient.getManifest(url);
-
-    final downloadInfo =
-        videoManifest.muxed.sortByVideoQuality().map((element) {
-      return DownloadInfoModel(
-        itemName: title,
-        quality: element.qualityLabel,
-        mediaCodec: element.codec.mimeType,
-        videoSize: _getVideoSize(element),
-        bitRates: element.bitrate.megaBitsPerSecond.toString(),
-        videoId: url,
-        sizeType: sizeType,
-      );
-    }).toList()
-          ..addAll(
-            videoManifest.audio
-                .sortByBitrate()
-                .map(
-                  (e) => DownloadInfoModel(
-                    itemName: title,
-                    quality: e.qualityLabel,
-                    mediaCodec: e.codec.mimeType,
-                    videoSize: _getVideoSize(e),
-                    bitRates: e.bitrate.megaBitsPerSecond.toString(),
-                    videoId: url,
-                    sizeType: sizeType,
-                  ),
-                )
-                .toList(),
-          );
-    return downloadInfo;
-  }
-
   double _getVideoSize(StreamInfo element) {
     final size = element.size.totalBytes.toDouble();
     late double muxSize;
@@ -70,18 +33,49 @@ class YoutubeDownloaderData implements YoutubeDownloadData {
     return muxSize;
   }
 
+  /// Obtains the download info
+  @override
+  Future<List<DownloadInfoModel>> getDownloadInfo(
+    String url,
+    String title,
+  ) async {
+    final videoManifest = await youtube.videos.streamsClient.getManifest(url);
+
+    final downloadInfo = videoManifest.muxed.sortByVideoQuality().map((element) {
+      return DownloadInfoModel(
+        stream: element,
+        itemName: title,
+        quality: element.qualityLabel,
+        mediaCodec: element.codec.mimeType,
+        videoSize: _getVideoSize(element),
+        bitRates: element.bitrate.megaBitsPerSecond.toString(),
+        videoId: url,
+        sizeType: sizeType,
+      );
+    }).toList()
+      ..addAll(
+        videoManifest.audio
+            .sortByBitrate()
+            .map((e) => DownloadInfoModel(
+                  stream: e,
+                  itemName: title,
+                  quality: e.qualityLabel,
+                  mediaCodec: e.codec.mimeType,
+                  videoSize: _getVideoSize(e),
+                  bitRates: e.bitrate.megaBitsPerSecond.toString(),
+                  videoId: url,
+                  sizeType: sizeType,
+                ))
+            .toList(),
+      );
+    return downloadInfo;
+  }
+
   @override
   Future<StreamInfo> getDownloadStream(DownloadInfo info) async {
-    final manifest =
-        await youtube.videos.streamsClient.getManifest(info.videoId);
-    final audio = manifest.audio
-        .sortByBitrate()
-        .where((element) => element.qualityLabel == info.quality)
-        .first;
-    final video = manifest.muxed
-        .sortByVideoQuality()
-        .where((element) => element.qualityLabel == info.quality)
-        .first;
+    final manifest = await youtube.videos.streamsClient.getManifest(info.videoId);
+    final audio = manifest.audio.sortByBitrate().where((element) => element.qualityLabel == info.quality).first;
+    final video = manifest.muxed.sortByVideoQuality().where((element) => element.qualityLabel == info.quality).first;
     final isMusic = info.mediaCodec.split('/').first != 'video';
     final streamInfo = isMusic ? audio : video;
     return streamInfo;

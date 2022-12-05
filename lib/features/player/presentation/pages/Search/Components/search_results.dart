@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class SearchResults extends StatelessWidget {
   const SearchResults({super.key, required this.info});
-  final List<VideoInfo> info;
+  final List<SearchInfo> info;
 
   @override
   Widget build(BuildContext context) {
