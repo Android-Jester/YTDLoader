@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:down_yt/app/core/api.dart';
-import 'package:down_yt/features/player/domain/entities/video_info.dart';
 import 'package:down_yt/features/player/domain/usecases/search_videos.dart';
 import 'package:equatable/equatable.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';

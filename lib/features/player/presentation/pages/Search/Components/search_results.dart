@@ -1,4 +1,4 @@
-import 'package:down_yt/features/player/domain/entities/video_info.dart';
+import 'package:down_yt/features/player/domain/entities/video_search_data.dart';
 import 'package:down_yt/features/player/presentation/pages/Search/Components/videos_list.dart';
 import 'package:down_yt/features/player/presentation/widgets/mini_player.dart';
 import 'package:down_yt/features/player/presentation/widgets/search_bar.dart';

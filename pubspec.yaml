@@ -17,6 +17,9 @@ dependencies:
   # Dart State Management
   bloc: ^8.1.0
 
+  # HTTP Requests
+  dio: ^4.0.6
+  dio_cookie_manager: ^2.0.0
   # Functional Programming
   dartz: ^0.10.1
 
@@ -38,9 +41,9 @@ dependencies:
   # State Management
   get_it: ^7.2.0
 
-  # Database
-  #  hive: ^2.2.3
-  #  hive_flutter: ^1.1.0
+# Database
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
 
   # Checks internet Connections
   internet_connection_checker: ^0.0.1+3
@@ -48,11 +51,13 @@ dependencies:
   # International Localization
   intl: ^0.17.0
 
-  # Material 3 Color Generator
-  # material_color_utilities: ^0.2.0
+
 
   # Mini Player
   miniplayer: ^1.0.1
+
+  # Open File
+  open_file: ^3.2.1
 
   # Gets the paths
   path_provider: ^2.0.11
@@ -60,10 +65,11 @@ dependencies:
   # Gets Permissions on Android devices
   permission_handler: ^10.0.0
   pip_view: ^0.9.7
-
+  piped_api:
+    git:
+      url: https://github.com/TeamPiped/piped_dart
   pod_player: ^0.1.0
-  saf: ^1.0.3+4
-
+  share_plus: ^4.0.8
   # Webview with other features
   webviewx: ^0.2.1
 

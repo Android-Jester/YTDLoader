@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:down_yt/app/core/Error/Failures/failures.dart';
 import 'package:down_yt/app/core/network/network_checker.dart';
 import 'package:down_yt/features/player/data/datasources/remote/player_data.dart';
-import 'package:down_yt/features/player/domain/entities/video_info.dart';
 import 'package:down_yt/features/player/domain/repositories/player_repo.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:down_yt/features/player/domain/entities/video_info.dart';
+import 'package:down_yt/features/player/domain/entities/video_search_data.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:miniplayer/miniplayer.dart';

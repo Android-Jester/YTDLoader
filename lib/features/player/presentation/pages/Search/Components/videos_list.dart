@@ -1,5 +1,5 @@
 import 'package:down_yt/features/downloader/presentation/bloc/downloader_bloc.dart';
-import 'package:down_yt/features/player/domain/entities/video_info.dart';
+import 'package:down_yt/features/player/domain/entities/video_search_data.dart';
 import 'package:down_yt/features/player/presentation/bloc/player/player_bloc.dart';
 import 'package:down_yt/features/player/presentation/widgets/video_card.dart';
 import 'package:flutter/material.dart';
