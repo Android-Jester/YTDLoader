@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:down_yt/features/player/domain/entities/video_search_data.dart';
+import 'package:down_yt/features/player/domain/usecases/get_channel_data.dart';
+import 'package:down_yt/features/player/domain/usecases/get_playlist_data.dart';
+import 'package:down_yt/features/player/domain/usecases/get_video_data.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:miniplayer/miniplayer.dart';
@@ -11,7 +13,14 @@ part 'player_event.dart';
 part 'player_state.dart';
 
 class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
-  PlayerBloc() : super(PlayerInitial()) {
+  final GetVideoData videoData;
+  final GetPlaylistData playlistData;
+  final GetChannelData channelData;
+  PlayerBloc({
+    required this.videoData,
+    required this.playlistData,
+    required this.channelData,
+  }) : super(PlayerInitial()) {
     on<PlayVideo>(_startVideo);
     on<StopVideo>(_stopVideo);
     on<ChangeVideo>(_changeVideo);
@@ -20,7 +29,6 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
   late PodPlayerController podController;
   late PodVideoPlayer podPlayer;
   MiniplayerController miniController = MiniplayerController();
-  late SearchInfo info;
 
   void _startVideo(PlayVideo event, Emitter<PlayerState> emit) {
     miniController.animateToHeight(state: PanelState.MAX);

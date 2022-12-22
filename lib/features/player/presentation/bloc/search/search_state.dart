@@ -20,5 +20,5 @@ class SearchLoading extends SearchState {}
 class SearchInitial extends SearchState {
   const SearchInitial({required this.info});
 
-  final List<SearchInfo> info;
+  final List<SearchData> info;
 }

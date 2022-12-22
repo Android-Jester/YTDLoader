@@ -74,86 +74,98 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
 
   @override
   Future<List<VideoModel>> getPlaylistVideos(String id) async {
-    final playlist = await youtube.playlists.getVideos(id).take(20).toList();
-    final playlistData = playlist
-        .map(
-          (video) => VideoModel(
-            title: video.title,
-            channelName: video.author,
-            channelId: video.channelId.value,
-            description: video.description,
-            duration: video.duration,
-            uploadDate: video.uploadDate,
-            isLive: video.isLive,
-            likeCount: video.engagement.likeCount,
-            dislikeCount: video.engagement.dislikeCount,
-            viewCount: video.engagement.viewCount,
-          ),
-        )
-        .toList();
+    try {
+      final playlist = await youtube.playlists.getVideos(id).take(20).toList();
+      final playlistData = playlist
+          .map(
+            (video) => VideoModel(
+              title: video.title,
+              channelName: video.author,
+              channelId: video.channelId.value,
+              description: video.description,
+              duration: video.duration,
+              uploadDate: video.uploadDate,
+              isLive: video.isLive,
+              likeCount: video.engagement.likeCount,
+              dislikeCount: video.engagement.dislikeCount,
+              viewCount: video.engagement.viewCount,
+            ),
+          )
+          .toList();
 
-    return playlistData;
+      return playlistData;
+    } catch (err) {
+      throw Exception('unable to acquire playlist data');
+    }
   }
 
   @override
   Future<VideoModel> getVideosData(String id) async {
-    final video = await youtube.videos.get(id);
-    return VideoModel(
-      title: video.title,
-      channelName: video.author,
-      channelId: video.channelId.value,
-      description: video.description,
-      duration: video.duration,
-      uploadDate: video.uploadDate,
-      isLive: video.isLive,
-      likeCount: video.engagement.likeCount,
-      dislikeCount: video.engagement.dislikeCount,
-      viewCount: video.engagement.viewCount,
-    );
+    try {
+      final video = await youtube.videos.get(id);
+      return VideoModel(
+        title: video.title,
+        channelName: video.author,
+        channelId: video.channelId.value,
+        description: video.description,
+        duration: video.duration,
+        uploadDate: video.uploadDate,
+        isLive: video.isLive,
+        likeCount: video.engagement.likeCount,
+        dislikeCount: video.engagement.dislikeCount,
+        viewCount: video.engagement.viewCount,
+      );
+    } catch (err) {
+      throw Exception('unable to acquire videodata');
+    }
   }
 
   @override
   Future<ChannelModel> getChannelData(String id) async {
-    final channel = await youtube.channels.get(id);
-    final channelUploads = await youtube.channels.getUploads(id).take(20).toList();
-    final about = await youtube.channels.getAboutPage(id);
-    final videos = channelUploads
-        .map(
-          (video) => VideoData(
-            title: video.title,
-            channelName: video.author,
-            channelId: video.channelId.value,
-            description: video.description,
-            duration: video.duration,
-            uploadDate: video.uploadDate,
-            isLive: video.isLive,
-            likeCount: video.engagement.likeCount,
-            dislikeCount: video.engagement.dislikeCount,
-            viewCount: video.engagement.viewCount,
-          ),
-        )
-        .toList();
+    try {
+      final channel = await youtube.channels.get(id);
+      final channelUploads = await youtube.channels.getUploads(id).take(20).toList();
+      final about = await youtube.channels.getAboutPage(id);
+      final videos = channelUploads
+          .map(
+            (video) => VideoData(
+              title: video.title,
+              channelName: video.author,
+              channelId: video.channelId.value,
+              description: video.description,
+              duration: video.duration,
+              uploadDate: video.uploadDate,
+              isLive: video.isLive,
+              likeCount: video.engagement.likeCount,
+              dislikeCount: video.engagement.dislikeCount,
+              viewCount: video.engagement.viewCount,
+            ),
+          )
+          .toList();
 
-    return ChannelModel(
-      channelName: channel.title,
-      channelURL: channel.url,
-      logoUrl: channel.logoUrl,
-      bannerUrl: channel.bannerUrl,
-      about: AboutChannel(
-        description: about.description,
-        joinDate: about.joinDate,
-        sourceCountry: about.country,
-        associatedChannels: about.channelLinks
-            .map(
-              (e) => AssociatedChannel(
-                channelIcon: e.icon.path,
-                channelName: e.title,
-                channelUrl: e.url.path,
-              ),
-            )
-            .toList(),
-      ),
-      videos: videos,
-    );
+      return ChannelModel(
+        channelName: channel.title,
+        channelURL: channel.url,
+        logoUrl: channel.logoUrl,
+        bannerUrl: channel.bannerUrl,
+        about: AboutChannel(
+          description: about.description,
+          joinDate: about.joinDate,
+          sourceCountry: about.country,
+          associatedChannels: about.channelLinks
+              .map(
+                (e) => AssociatedChannel(
+                  channelIcon: e.icon.path,
+                  channelName: e.title,
+                  channelUrl: e.url.path,
+                ),
+              )
+              .toList(),
+        ),
+        videos: videos,
+      );
+    } catch (err) {
+      throw Exception('unable to acquire videodata');
+    }
   }
 }

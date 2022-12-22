@@ -2,31 +2,48 @@ import 'package:dartz/dartz.dart';
 import 'package:down_yt/app/core/Error/Failures/failures.dart';
 import 'package:down_yt/app/core/network/network_checker.dart';
 import 'package:down_yt/features/player/data/datasources/remote/player_data.dart';
+import 'package:down_yt/features/player/domain/entities/results/channel/channel_data.dart';
+import 'package:down_yt/features/player/domain/entities/results/video/video_data.dart';
+import 'package:down_yt/features/player/domain/entities/search/search_data.dart';
 import 'package:down_yt/features/player/domain/repositories/player_repo.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
-class PlayerRepoImpl implements PlayerRepo {
-  PlayerRepoImpl({
+class YoutubePlayerImpl extends PlayerRepo {
+  YoutubePlayerImpl({
+    required this.remoteData,
     required this.internetStatus,
-    required this.videoData,
   });
 
+  final YoutubePlayerData remoteData;
   final NetworkChecker internetStatus;
-  final YoutubePlayerData videoData;
+
   @override
-  Future<Either<Failure, List<SearchInfo>>> videoSearch(
-    String query,
-    SearchFilter filter,
-  ) async {
-    try {
-      if (await internetStatus.isConnected) {
-        final searchData = await videoData.searchVideos(query, filter);
-        return Right(searchData);
-      } else {
-        return Left(NetworkFailure());
-      }
-    } catch (e) {
-      return Left(VideoSearchFailure());
-    }
+  Future<Either<Failure, ChannelData>> channelInfo(String id) {
+    // TODO: implement channelInfo
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, List<VideoData>>> playlistInfo(String id) {
+    // TODO: implement playlistInfo
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, List<SearchData>>> querySearch(String query, SearchFilter filter) {
+    // TODO: implement querySearch
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, List<String>>> querySuggestions(String query) {
+    // TODO: implement querySuggestions
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, VideoData>> videoInfo(String id) {
+    // TODO: implement videoInfo
+    throw UnimplementedError();
   }
 }
