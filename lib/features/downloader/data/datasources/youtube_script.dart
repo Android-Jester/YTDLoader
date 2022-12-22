@@ -6,9 +6,8 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 abstract class YoutubeDownloadData {
   Future<List<DownloadInfoModel>> getDownloadModel(VideoData videoData);
-  Future<void> getVideoStream();
-  Future<void> getAudioStream();
-  Future<void> getMuxedStream();
+  Future<String> getVideoStream();
+  Future<String> getAudioStream();
 }
 
 class DownloadVideoImpl implements YoutubeDownloadData {
@@ -52,20 +51,15 @@ class DownloadVideoImpl implements YoutubeDownloadData {
   }
 
   @override
-  Future<void> getAudioStream(AudioOnlyStreamInfo streamInfo) {
+  Future<String> getAudioStream(AudioOnlyStreamInfo streamInfo) {
     try {
       final
     } catch(err) {}
   }
 
-  @override
-  Future<void> getMuxedStream() {
-    // TODO: implement getMuxedStream
-    throw UnimplementedError();
-  }
 
   @override
-  Future<void> getVideoStream() {
+  Future<String> getVideoStream() {
     // TODO: implement getVideoStream
     throw UnimplementedError();
   }

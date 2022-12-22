@@ -9,57 +9,104 @@ import 'package:down_yt/features/player/domain/entities/search/search_data.dart'
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 abstract class YoutubePlayerData {
-  Future<List<SearchModel>> searchYoutube({required String query, required SearchFilter filter});
+  Stream<SearchModel> searchYoutube({required String query, required SearchFilter filter});
   Future<List<String>> getSuggestions(String query);
-  Future<List<VideoModel>> getPlaylistVideos(String id);
+  Future<Stream<VideoModel>> getPlaylistVideos(String id);
   Future<VideoModel> getVideosData(String id);
   Future<ChannelModel> getChannelData(String id);
 }
 
 class YoutubePlayerDataImpl implements YoutubePlayerData {
   @override
-  Future<List<SearchModel>> searchYoutube({required String query, required SearchFilter filter}) async {
+  Stream<SearchModel> searchYoutube({required String query, SearchFilter filter = SortFilters.relevance}) async* {
     try {
       final searchAPI = youtube.search;
-      final resultList = <SearchModel>[];
-      final searchResult = await searchAPI.searchContent(query, filter: filter);
+      var searchResult = await searchAPI.searchContent(query, filter: filter);
+      final secondResult = await searchResult.nextPage();
+      var firstCount = true;
+      while (secondResult != null) {
+        // obtain the search Result
+        if (firstCount) {
+          for (var item in searchResult) {
+            if (item is SearchVideo) {
+              yield SearchModel(
+                video: VideoSearchData(
+                  title: item.title,
+                  description: item.description,
+                  duration: item.duration,
+                  videoId: item.id.value,
+                  channelId: item.channelId,
+                  isLive: item.isLive,
+                  channelAuthor: item.author,
+                  thumbnailUrl: item.thumbnails.firstWhere((element) => element.height > 250).url.path,
+                  viewCount: item.viewCount,
+                ),
+              );
+            } else if (item is SearchPlaylist) {
+              yield SearchModel(
+                playlist: PlaylistSearchData(
+                  title: item.playlistTitle,
+                  playlistCount: item.playlistVideoCount,
+                  playlistId: item.playlistId.value,
+                  thumbnailURL: item.thumbnails.first.url.path,
+                ),
+              );
+            } else if (item is SearchChannel) {
+              yield SearchModel(
+                channel: ChannelSearchData(
+                  channelName: item.name,
+                  channelDescription: item.description,
+                  channelId: item.id.value,
+                  videoCount: item.videoCount,
+                ),
+              );
+            }
+          }
+          firstCount = false;
+        } else {
+          searchResult = secondResult;
+          for (var item in searchResult) {
+            if (item is SearchVideo) {
+              yield SearchModel(
+                video: VideoSearchData(
+                  title: item.title,
+                  description: item.description,
+                  duration: item.duration,
+                  videoId: item.id.value,
+                  channelId: item.channelId,
+                  isLive: item.isLive,
+                  channelAuthor: item.author,
+                  thumbnailUrl: item.thumbnails.first.url.path,
+                  viewCount: item.viewCount,
+                ),
+              );
+            } else if (item is SearchPlaylist) {
+              print('Playlist2 Item: ${item.toString()}');
 
-      for (var item in searchResult) {
-        if (item is SearchVideo) {
-          resultList.add(
-            SearchModel(
-              video: VideoSearchData(
-                title: item.title,
-                description: item.description,
-                duration: item.duration,
-                videoId: item.id.value,
-                channelId: item.channelId,
-                isLive: item.isLive,
-                channelAuthor: item.author,
-                thumbnailUrl: item.thumbnails.firstWhere((element) => element.height > 250).url.path,
-                viewCount: item.viewCount,
-              ),
-            ),
-          );
-        } else if (item is SearchPlaylist) {
-          resultList.add(
-            SearchModel(
-              playlist: PlaylistSearchData(
-                title: item.playlistTitle,
-                playlistCount: item.playlistVideoCount,
-                playlistId: item.playlistId.value,
-                thumbnailURL: item.thumbnails.firstWhere((element) => element.height > 250).url.path,
-              ),
-            ),
-          );
-        } else if (item is SearchChannel) {
-          resultList.add(SearchModel(
-            channel: ChannelSearchData(channelName: item.name, channelDescription: item.description, channelId: item.id.value, videoCount: item.videoCount),
-          ));
+              yield SearchModel(
+                playlist: PlaylistSearchData(
+                  title: item.playlistTitle,
+                  playlistCount: item.playlistVideoCount,
+                  playlistId: item.playlistId.value,
+                  thumbnailURL: item.thumbnails.first.url.path,
+                ),
+              );
+            } else if (item is SearchChannel) {
+              yield SearchModel(
+                channel: ChannelSearchData(
+                  channelName: item.name,
+                  channelDescription: item.description,
+                  channelId: item.id.value,
+                  videoCount: item.videoCount,
+                ),
+              );
+            }
+          }
+          firstCount = false;
         }
       }
-      return resultList;
     } catch (err) {
+      print('err: ${err.runtimeType}');
       throw SearchException('unable to obtain search data \n Exception: ${err.runtimeType}');
     }
   }
@@ -74,12 +121,12 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
   }
 
   @override
-  Future<List<VideoModel>> getPlaylistVideos(String id) async {
+  Future<Stream<VideoModel>> getPlaylistVideos(String id) async {
     try {
-      final playlist = await youtube.playlists.getVideos(id).take(20).toList();
-      final playlistData = playlist
-          .map(
-            (video) => VideoModel(
+      final playlist = youtube.playlists.getVideos(id);
+      return playlist
+          .map<VideoModel>(
+            (Video video) => VideoModel(
               videoId: video.id.value,
               title: video.title,
               channelName: video.author,
@@ -93,9 +140,38 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
               viewCount: video.engagement.viewCount,
             ),
           )
-          .toList();
+          .asBroadcastStream();
+      // ..listen((Video video) async* {
+      //   yield VideoModel(
+      //     videoId: video.id.value,
+      //     title: video.title,
+      //     channelName: video.author,
+      //     channelId: video.channelId.value,
+      //     description: video.description,
+      //     duration: video.duration,
+      //     uploadDate: video.uploadDate,
+      //     isLive: video.isLive,
+      //     likeCount: video.engagement.likeCount,
+      //     dislikeCount: video.engagement.dislikeCount,
+      //     viewCount: video.engagement.viewCount,
+      //   );
+      // });
+      // .map(
+      //   (video) => VideoModel(
+      //     videoId: video.id.value,
+      //     title: video.title,
+      //     channelName: video.author,
+      //     channelId: video.channelId.value,
+      //     description: video.description,
+      //     duration: video.duration,
+      //     uploadDate: video.uploadDate,
+      //     isLive: video.isLive,
+      //     likeCount: video.engagement.likeCount,
+      //     dislikeCount: video.engagement.dislikeCount,
+      //     viewCount: video.engagement.viewCount,
+      //   ),
+      // ).asBroadcastStream();
 
-      return playlistData;
     } catch (err) {
       throw ObtainingPlaylistDataException('unable to acquire playlist data \n Exception: ${err.runtimeType}');
     }
