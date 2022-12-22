@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class VideoData extends Equatable {
   const VideoData({
+    required this.videoId,
     required this.title,
     required this.channelName,
     required this.channelId,
@@ -15,6 +16,7 @@ class VideoData extends Equatable {
   });
 
   final String title;
+  final String videoId;
   final String channelName;
   final String channelId;
   final String description;

@@ -2,6 +2,7 @@ import 'package:down_yt/features/player/domain/entities/results/video/video_data
 
 class VideoModel extends VideoData {
   const VideoModel({
+    required super.videoId,
     required super.title,
     required super.channelName,
     required super.channelId,

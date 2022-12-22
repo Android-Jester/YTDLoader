@@ -1,17 +1,21 @@
 part of 'exceptions.dart';
 
-class VideoSearchException implements Exceptions {
-  VideoSearchException({required this.message});
-  final String message;
-
-  @override
-  String get errormessage => message;
+class SearchException extends Exceptions {
+  SearchException(super.errormessage);
 }
 
-class VideoDownloadException implements Exceptions {
-  VideoDownloadException({required this.message});
-  final String message;
+class ObtainingVideoDataException extends Exceptions {
+  ObtainingVideoDataException(super.errormessage);
+}
 
-  @override
-  String get errormessage => message;
+class ObtainingPlaylistDataException extends Exceptions {
+  ObtainingPlaylistDataException(super.errormessage);
+}
+
+class ObtainingChannelDataException extends Exceptions {
+  ObtainingChannelDataException(super.errormessage);
+}
+
+class VideoDownloadException extends Exceptions {
+  VideoDownloadException(super.errormessage);
 }

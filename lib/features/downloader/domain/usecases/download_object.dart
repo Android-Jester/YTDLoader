@@ -8,7 +8,7 @@ import 'package:equatable/equatable.dart';
 class DownloadObject extends ActivityUseCase<double, ObjectInfo> {
   DownloadObject(this.repo);
 
-  final DownloaderRepo repo;
+  final VideoDownloaderRepo repo;
   @override
   Future<Either<Failure, double>> call({required ObjectInfo params}) async {
     return repo.downloadObject(params.info, params.downloadLocation);

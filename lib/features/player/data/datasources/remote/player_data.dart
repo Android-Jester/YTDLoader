@@ -1,3 +1,4 @@
+import 'package:down_yt/app/core/Error/Exceptions/exceptions.dart';
 import 'package:down_yt/app/core/api.dart';
 import 'package:down_yt/features/player/data/models/channel_model.dart';
 import 'package:down_yt/features/player/data/models/search_model.dart';
@@ -59,7 +60,7 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
       }
       return resultList;
     } catch (err) {
-      throw Exception('unabled to obtain search data');
+      throw SearchException('unable to obtain search data \n Exception: ${err.runtimeType}');
     }
   }
 
@@ -68,7 +69,7 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
     try {
       return youtube.search.getQuerySuggestions(query);
     } catch (err) {
-      throw Exception('unable to get data');
+      throw SearchException('unable to obtain search suggestion \n Exception: ${err.runtimeType}');
     }
   }
 
@@ -79,6 +80,7 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
       final playlistData = playlist
           .map(
             (video) => VideoModel(
+              videoId: video.id.value,
               title: video.title,
               channelName: video.author,
               channelId: video.channelId.value,
@@ -95,7 +97,7 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
 
       return playlistData;
     } catch (err) {
-      throw Exception('unable to acquire playlist data');
+      throw ObtainingPlaylistDataException('unable to acquire playlist data \n Exception: ${err.runtimeType}');
     }
   }
 
@@ -104,6 +106,7 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
     try {
       final video = await youtube.videos.get(id);
       return VideoModel(
+        videoId: video.id.value,
         title: video.title,
         channelName: video.author,
         channelId: video.channelId.value,
@@ -116,7 +119,7 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
         viewCount: video.engagement.viewCount,
       );
     } catch (err) {
-      throw Exception('unable to acquire videodata');
+      throw ObtainingVideoDataException('unable to acquire videodata\n Exception: ${err.runtimeType}');
     }
   }
 
@@ -129,6 +132,7 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
       final videos = channelUploads
           .map(
             (video) => VideoData(
+              videoId: video.id.value,
               title: video.title,
               channelName: video.author,
               channelId: video.channelId.value,
@@ -165,7 +169,7 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
         videos: videos,
       );
     } catch (err) {
-      throw Exception('unable to acquire videodata');
+      throw ObtainingChannelDataException('unable to acquire channel data\n Exception: ${err.runtimeType}');
     }
   }
 }

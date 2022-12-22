@@ -10,7 +10,7 @@ class GetDownloadInfo extends ActivityUseCase<List<DownloadInfo>, DownloadParams
     required this.repo,
   });
 
-  final DownloaderRepo repo;
+  final VideoDownloaderRepo repo;
 
   @override
   Future<Either<Failure, List<DownloadInfo>>> call({required DownloadParams params}) {

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:down_yt/app/core/Error/Exceptions/exceptions.dart';
 import 'package:down_yt/app/core/Error/Failures/failures.dart';
 import 'package:down_yt/app/core/network/network_checker.dart';
 import 'package:down_yt/features/player/data/datasources/remote/player_data.dart';
@@ -18,32 +19,72 @@ class YoutubePlayerImpl extends PlayerRepo {
   final NetworkChecker internetStatus;
 
   @override
-  Future<Either<Failure, ChannelData>> channelInfo(String id) {
-    // TODO: implement channelInfo
-    throw UnimplementedError();
+  Future<Either<Failure, ChannelData>> channelInfo(String id) async {
+    try {
+      if (await internetStatus.isConnected) {
+        final channelData = await remoteData.getChannelData(id);
+        return Right(channelData);
+      } else {
+        return const Left(NetworkFailure('Unable to obtain channel Data'));
+      }
+    } on ObtainingChannelDataException catch (err) {
+      return Left(DataFailure(err.errormessage));
+    }
   }
 
   @override
-  Future<Either<Failure, List<VideoData>>> playlistInfo(String id) {
-    // TODO: implement playlistInfo
-    throw UnimplementedError();
+  Future<Either<Failure, List<VideoData>>> playlistInfo(String id) async {
+    try {
+      if (await internetStatus.isConnected) {
+        final playlistData = await remoteData.getPlaylistVideos(id);
+        return Right(playlistData);
+      } else {
+        return const Left(NetworkFailure('Unable to obtain playlist Data'));
+      }
+    } on ObtainingPlaylistDataException catch (err) {
+      return Left(DataFailure(err.errormessage));
+    }
   }
 
   @override
-  Future<Either<Failure, List<SearchData>>> querySearch(String query, SearchFilter filter) {
-    // TODO: implement querySearch
-    throw UnimplementedError();
+  Future<Either<Failure, List<SearchData>>> querySearch(String query, SearchFilter filter) async {
+    try {
+      if (await internetStatus.isConnected) {
+        final searchData = await remoteData.searchYoutube(query: query, filter: filter);
+        return Right(searchData);
+      } else {
+        return const Left(NetworkFailure('Unable to obtain search data'));
+      }
+    } on SearchException catch (err) {
+      return Left(DataFailure(err.errormessage));
+    }
   }
 
   @override
-  Future<Either<Failure, List<String>>> querySuggestions(String query) {
-    // TODO: implement querySuggestions
-    throw UnimplementedError();
+  Future<Either<Failure, List<String>>> querySuggestions(String query) async {
+    try {
+      if (await internetStatus.isConnected) {
+        final searchData = await remoteData.getSuggestions(query);
+        return Right(searchData);
+      } else {
+        return const Left(NetworkFailure('unable to obtain suggestions'));
+      }
+    } on SearchException catch (err) {
+      return Left(DataFailure(err.errormessage));
+    }
   }
 
   @override
-  Future<Either<Failure, VideoData>> videoInfo(String id) {
-    // TODO: implement videoInfo
-    throw UnimplementedError();
+  Future<Either<Failure, VideoData>> videoInfo(String id) async {
+    try {
+      if (await internetStatus.isConnected) {
+        final videoData = await remoteData.getVideosData(id);
+        return Right(videoData);
+      } else {
+        return const Left(NetworkFailure('unable to obtain videoData'));
+      }
+    } on ObtainingVideoDataException catch (err) {
+      return Left(DataFailure(err.errormessage));
+    }
   }
 }

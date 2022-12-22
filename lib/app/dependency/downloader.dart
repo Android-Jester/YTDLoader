@@ -7,13 +7,13 @@ Future<void> downloaderInject() async {
     // Data Source
     ..registerSingleton<YoutubeDownloadData>(YoutubeDownloaderData())
     // Repository
-    ..registerSingleton<DownloaderRepo>(
+    ..registerSingleton<VideoDownloaderRepo>(
       DownloadImpl(
         netChecker: locator.get<NetworkChecker>(),
         downloadData: locator.get<YoutubeDownloadData>(),
       ),
     )
     // Use case
-    ..registerSingleton<GetDownloadInfo>(GetDownloadInfo(repo: locator.get<DownloaderRepo>()))
-    ..registerSingleton<DownloadObject>(DownloadObject(locator.get<DownloaderRepo>()));
+    ..registerSingleton<GetDownloadInfo>(GetDownloadInfo(repo: locator.get<VideoDownloaderRepo>()))
+    ..registerSingleton<DownloadObject>(DownloadObject(locator.get<VideoDownloaderRepo>()));
 }

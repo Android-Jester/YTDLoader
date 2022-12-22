@@ -24,35 +24,11 @@ class DownloadInfoFailure implements Failure {
 }
 
 // Player Failures
-class VideoGetFailure implements Failure {
-  @override
-  List<Object?> get props => [];
 
-  @override
-  bool? get stringify => false;
-
-  @override
-  String get errorMessage => 'Failed to obtain video stream';
+class DataFailure extends Failure {
+  const DataFailure(super.errorMessage);
 }
 
-class VideoDataGetFailure implements Failure {
-  @override
-  List<Object?> get props => [];
-
-  @override
-  bool? get stringify => false;
-
-  @override
-  String get errorMessage => 'Failed to acquire Video Data';
-}
-
-class VideoSearchFailure implements Failure {
-  @override
-  List<Object?> get props => [];
-
-  @override
-  bool? get stringify => false;
-
-  @override
-  String get errorMessage => 'Search Failed';
+class SearchFailure extends Failure {
+  const SearchFailure(super.errorMessage);
 }
