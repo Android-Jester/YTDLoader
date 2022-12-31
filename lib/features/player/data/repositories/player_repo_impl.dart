@@ -33,7 +33,7 @@ class YoutubePlayerImpl extends PlayerRepo {
   }
 
   @override
-  Future<Either<Failure, List<VideoData>>> playlistInfo(String id) async {
+  Future<Either<Failure, Stream<VideoData>>> playlistInfo(String id) async {
     try {
       if (await internetStatus.isConnected) {
         final playlistData = await remoteData.getPlaylistVideos(id);
@@ -47,10 +47,12 @@ class YoutubePlayerImpl extends PlayerRepo {
   }
 
   @override
-  Future<Either<Failure, List<SearchData>>> querySearch(String query, SearchFilter filter) async {
+  Future<Either<Failure, Stream<SearchData>>> querySearch(
+      String query, SearchFilter filter) async {
     try {
       if (await internetStatus.isConnected) {
-        final searchData = await remoteData.searchYoutube(query: query, filter: filter);
+        final searchData =
+            await remoteData.searchYoutube(query: query, filter: filter);
         return Right(searchData);
       } else {
         return const Left(NetworkFailure('Unable to obtain search data'));
@@ -84,6 +86,22 @@ class YoutubePlayerImpl extends PlayerRepo {
         return const Left(NetworkFailure('unable to obtain videoData'));
       }
     } on ObtainingVideoDataException catch (err) {
+      return Left(DataFailure(err.errormessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<SearchData>>> getFeeds() async {
+    try {
+      print('Internet Status: ${await internetStatus.isConnected}');
+      if (await internetStatus.isConnected) {
+        final data = await remoteData.trendingFeed();
+        print('Repo Data: ${data.toString()}');
+        return Right(data);
+      } else {
+        return const Left(DataFailure('Unable to acquire Data'));
+      }
+    } on ObtainingChannelDataException catch (err) {
       return Left(DataFailure(err.errormessage));
     }
   }

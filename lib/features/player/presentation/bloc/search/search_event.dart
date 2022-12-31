@@ -8,10 +8,15 @@ abstract class SearchEvent extends Equatable {
 }
 
 class SearchingVideos extends SearchEvent {
-  const SearchingVideos(this.searchQuery,
-      {this.filter = VideoFilter.video, this.firstSearch = true,});
+  const SearchingVideos(
+    this.searchQuery, {
+    this.filter = VideoFilter.video,
+    this.firstSearch = true,
+  });
 
   final String searchQuery;
   final VideoFilter filter;
   final bool firstSearch;
 }
+
+class CallInitialFeed extends SearchEvent {}

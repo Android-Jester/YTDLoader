@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:down_yt/app/core/Error/Exceptions/exceptions.dart';
 import 'package:down_yt/app/core/api.dart';
 import 'package:down_yt/features/player/data/models/channel_model.dart';
@@ -6,19 +7,25 @@ import 'package:down_yt/features/player/data/models/video_model.dart';
 import 'package:down_yt/features/player/domain/entities/results/channel/channel_data.dart';
 import 'package:down_yt/features/player/domain/entities/results/video/video_data.dart';
 import 'package:down_yt/features/player/domain/entities/search/search_data.dart';
+import 'package:piped_api/piped_api.dart' as pip;
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 abstract class YoutubePlayerData {
-  Stream<SearchModel> searchYoutube({required String query, required SearchFilter filter});
+  Stream<SearchModel> searchYoutube(
+      {required String query, required SearchFilter filter});
   Future<List<String>> getSuggestions(String query);
   Future<Stream<VideoModel>> getPlaylistVideos(String id);
   Future<VideoModel> getVideosData(String id);
   Future<ChannelModel> getChannelData(String id);
+  Future<List<SearchModel>> trendingFeed();
 }
 
 class YoutubePlayerDataImpl implements YoutubePlayerData {
   @override
-  Stream<SearchModel> searchYoutube({required String query, SearchFilter filter = SortFilters.relevance}) async* {
+  Stream<SearchModel> searchYoutube({
+    required String query,
+    SearchFilter filter = SortFilters.relevance,
+  }) async* {
     try {
       final searchAPI = youtube.search;
       var searchResult = await searchAPI.searchContent(query, filter: filter);
@@ -38,7 +45,10 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
                   channelId: item.channelId,
                   isLive: item.isLive,
                   channelAuthor: item.author,
-                  thumbnailUrl: item.thumbnails.firstWhere((element) => element.height > 250).url.path,
+                  thumbnailUrl: item.thumbnails
+                      .firstWhere((element) => element.height > 250)
+                      .url
+                      .path,
                   viewCount: item.viewCount,
                 ),
               );
@@ -107,7 +117,8 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
       }
     } catch (err) {
       print('err: ${err.runtimeType}');
-      throw SearchException('unable to obtain search data \n Exception: ${err.runtimeType}');
+      throw SearchException(
+          'unable to obtain search data \n Exception: ${err.runtimeType}');
     }
   }
 
@@ -116,7 +127,8 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
     try {
       return youtube.search.getQuerySuggestions(query);
     } catch (err) {
-      throw SearchException('unable to obtain search suggestion \n Exception: ${err.runtimeType}');
+      throw SearchException(
+          'unable to obtain search suggestion \n Exception: ${err.runtimeType}');
     }
   }
 
@@ -173,7 +185,8 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
       // ).asBroadcastStream();
 
     } catch (err) {
-      throw ObtainingPlaylistDataException('unable to acquire playlist data \n Exception: ${err.runtimeType}');
+      throw ObtainingPlaylistDataException(
+          'unable to acquire playlist data \n Exception: ${err.runtimeType}');
     }
   }
 
@@ -195,7 +208,8 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
         viewCount: video.engagement.viewCount,
       );
     } catch (err) {
-      throw ObtainingVideoDataException('unable to acquire videodata\n Exception: ${err.runtimeType}');
+      throw ObtainingVideoDataException(
+          'unable to acquire videodata\n Exception: ${err.runtimeType}');
     }
   }
 
@@ -203,7 +217,8 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
   Future<ChannelModel> getChannelData(String id) async {
     try {
       final channel = await youtube.channels.get(id);
-      final channelUploads = await youtube.channels.getUploads(id).take(20).toList();
+      final channelUploads =
+          await youtube.channels.getUploads(id).take(20).toList();
       final about = await youtube.channels.getAboutPage(id);
       final videos = channelUploads
           .map(
@@ -245,7 +260,41 @@ class YoutubePlayerDataImpl implements YoutubePlayerData {
         videos: videos,
       );
     } catch (err) {
-      throw ObtainingChannelDataException('unable to acquire channel data\n Exception: ${err.runtimeType}');
+      throw ObtainingChannelDataException(
+          'unable to acquire channel data\n Exception: ${err.runtimeType}');
+    }
+  }
+
+  @override
+  Future<List<SearchModel>> trendingFeed() async {
+    try {
+      var api = pip.PipedApi().getFeedApi();
+      final channels = BuiltList<String>(
+          ['UCs6KfncB4OV6Vug4o_bzijg', 'UClcE-kVhqyiHCcjYwcpfj9w']);
+      final result = await api.feedUnauthenticated(
+        channels: channels,
+      );
+
+      final searchList = result.data?.map<SearchModel>((pip.StreamItem video) {
+        return SearchModel(
+          video: VideoSearchData(
+            title: video.title,
+            description: '',
+            duration: Duration(seconds: video.duration).toString(),
+            videoId: video.url.split('=').last,
+            channelId: (video.uploaderUrl?.split('=').last)!,
+            isLive: video.duration > 60 * 60 * 24 * 3,
+            channelAuthor: video.uploaderName!,
+            thumbnailUrl: video.thumbnail,
+            viewCount: video.views!,
+          ),
+        );
+      }).toList();
+      return searchList!;
+    } catch (err) {
+      print('err: ${err.runtimeType.toString()}');
+      throw ObtainingChannelDataException(
+          'unable to acquire feed data\n Exception: ${err.runtimeType}');
     }
   }
 }

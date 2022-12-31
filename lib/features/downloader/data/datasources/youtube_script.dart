@@ -6,8 +6,8 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 abstract class YoutubeDownloadData {
   Future<List<DownloadInfoModel>> getDownloadModel(VideoData videoData);
-  Future<String> getVideoStream();
-  Future<String> getAudioStream();
+  Future<String> getAudioStreamLink(AudioOnlyStreamInfo streamInfo);
+  Future<String> getVideoStreamLink(VideoOnlyStreamInfo streamInfo);
 }
 
 class DownloadVideoImpl implements YoutubeDownloadData {
@@ -32,35 +32,29 @@ class DownloadVideoImpl implements YoutubeDownloadData {
             ),
           );
         } else if (item is VideoOnlyStreamInfo) {
-          downloadInfoList.add(DownloadInfoModel(
+          downloadInfoList.add(
+            DownloadInfoModel(
               videoDownloadInfo: VideoDownloadInfo(
-            itemName: videoData.title,
-            videoQuality: item.qualityLabel,
-            mediaCodec: item.codec.mimeType,
-            videoId: videoData.videoId,
-            stream: item,
-            videoSize: item.size.totalBytes,
-          )));
+                itemName: videoData.title,
+                videoQuality: item.qualityLabel,
+                mediaCodec: item.codec.mimeType,
+                videoId: videoData.videoId,
+                stream: item,
+                videoSize: item.size.totalBytes,
+              ),
+            ),
+          );
         }
       }
       return downloadInfoList;
     } catch (err) {
-      //TODO: Exception
       throw Exception();
     }
   }
 
   @override
-  Future<String> getAudioStream(AudioOnlyStreamInfo streamInfo) {
-    try {
-      final
-    } catch(err) {}
-  }
-
+  Future<String> getAudioStreamLink(AudioOnlyStreamInfo streamInfo) async => streamInfo.url.path;
 
   @override
-  Future<String> getVideoStream() {
-    // TODO: implement getVideoStream
-    throw UnimplementedError();
-  }
+  Future<String> getVideoStreamLink(VideoOnlyStreamInfo streamInfo) async => streamInfo.url.path;
 }

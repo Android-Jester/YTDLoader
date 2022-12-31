@@ -1,28 +1,17 @@
 part of 'failures.dart';
 
 // Downloader Failures
-class DownloadFailure implements Failure {
-  @override
-  List<Object?> get props => [];
-
-  @override
-  bool? get stringify => false;
-
-  @override
-  String get errorMessage => 'Failed to acquire file';
+class DownloadFailure extends Failure {
+  const DownloadFailure(super.errorMessage);
 }
 
-class DownloadInfoFailure implements Failure {
-  @override
-  String get errorMessage => 'Failed to acquire download info';
-
-  @override
-  List<Object?> get props => [errorMessage];
-
-  @override
-  bool? get stringify => false;
+class DownloadInfoFailure extends Failure {
+  const DownloadInfoFailure(super.errorMessage);
 }
 
+class MuxVideoFailure extends Failure {
+  const MuxVideoFailure(super.errorMessage);
+}
 // Player Failures
 
 class DataFailure extends Failure {

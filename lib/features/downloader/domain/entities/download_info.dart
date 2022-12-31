@@ -19,3 +19,18 @@ class DownloadInfo extends Equatable {
         audioDownloadInfo,
       ];
 }
+
+class DownloadResult extends Equatable {
+  const DownloadResult({
+    required this.videoPath,
+    required this.audioPath,
+  });
+
+  final String videoPath;
+  final String audioPath;
+  @override
+  List<Object?> get props => [
+        videoPath,
+        audioPath,
+      ];
+}

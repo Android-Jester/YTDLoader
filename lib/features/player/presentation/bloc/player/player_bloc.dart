@@ -14,7 +14,7 @@ part 'player_state.dart';
 
 class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
   final GetVideoData videoData;
-  final GetPlaylistData playlistData;
+  final GetPlayListData playlistData;
   final GetChannelData channelData;
   PlayerBloc({
     required this.videoData,

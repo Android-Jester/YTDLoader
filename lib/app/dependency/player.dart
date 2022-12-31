@@ -5,13 +5,13 @@ Future<void> playerInject() async {
     // Bloc Factory
     ..registerFactory<SearchBloc>(
       () => SearchBloc(
-        search: locator.get<SearchVideos>(),
-      ),
+          search: locator.get<SearchVideos>(),
+          feedData: locator.get<InitialFeed>()),
     )
     ..registerFactory<PlayerBloc>(
       () => PlayerBloc(
         channelData: locator.get<GetChannelData>(),
-        playlistData: locator.get<GetPlaylistData>(),
+        playlistData: locator.get<GetPlayListData>(),
         videoData: locator.get<GetVideoData>(),
       ),
     )
@@ -30,11 +30,12 @@ Future<void> playerInject() async {
         repository: locator.get<PlayerRepo>(),
       ),
     )
-    ..registerSingleton<GetPlaylistData>(
-      GetPlaylistData(
-        repository: locator.get<PlayerRepo>(),
+    ..registerSingleton<GetPlayListData>(
+      GetPlayListData(
+        locator.get<PlayerRepo>(),
       ),
     )
+    ..registerSingleton<InitialFeed>(InitialFeed(locator.get<PlayerRepo>()))
     ..registerSingleton<GetChannelData>(
       GetChannelData(
         repository: locator.get<PlayerRepo>(),

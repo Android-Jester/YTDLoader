@@ -17,6 +17,9 @@ dependencies:
   # Dart State Management
   bloc: ^8.1.0
 
+  # Built List
+  built_collection: ^5.1.1
+
   # HTTP Requests
   dio: ^4.0.6
   dio_cookie_manager: ^2.0.0
@@ -32,6 +35,9 @@ dependencies:
 
   # Flutter State Management
   flutter_bloc: ^8.1.1
+
+  # Video Encoding and Rendering
+  ffmpeg_kit_flutter: ^5.1.0
 
   # Localization(Language and types)
   flutter_localizations:

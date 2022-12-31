@@ -5,13 +5,16 @@ import 'package:down_yt/features/downloader/domain/entities/download_info.dart';
 import 'package:down_yt/features/downloader/domain/repositories/download_repo.dart';
 import 'package:equatable/equatable.dart';
 
-class DownloadObject extends ActivityUseCase<double, ObjectInfo> {
-  DownloadObject(this.repo);
+class DownloadVideo extends ActivityUseCase<void, ObjectInfo> {
+  DownloadVideo(this.repo);
 
   final VideoDownloaderRepo repo;
   @override
-  Future<Either<Failure, double>> call({required ObjectInfo params}) async {
-    return repo.downloadObject(params.info, params.downloadLocation);
+  Future<Either<Failure, void>> call({required ObjectInfo params}) async {
+    return repo.downloadVideo(
+      params.info,
+      params.downloadLocation,
+    );
   }
 }
 
