@@ -15,7 +15,7 @@ dependencies:
   awesome_notifications: ^0.7.4+1
 
   # Dart State Management
-  bloc: ^8.1.0
+  bloc: ^8.1.1
 
   # Built List
   built_collection: ^5.1.1
