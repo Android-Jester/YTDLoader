@@ -80,7 +80,7 @@ dependencies:
   webviewx: ^0.2.1
 
   # Youtube API and Downloadable
-  youtube_explode_dart: ^1.12.2
+  youtube_explode_dart: ^1.12.4
 
   # Flutter Youtube Player
   # youtube_player_flutter: ^8.1.1
