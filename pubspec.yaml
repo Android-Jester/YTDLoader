@@ -66,7 +66,7 @@ dependencies:
   open_file: ^3.2.1
 
   # Gets the paths
-  path_provider: ^2.0.11
+  path_provider: ^2.0.14
 
   # Gets Permissions on Android devices
   permission_handler: ^10.0.0
